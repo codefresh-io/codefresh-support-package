@@ -22,7 +22,7 @@ class Utility:
             )
 
     def prepare_package(self, output_filename: str, dir_path: str):
-        compressed_support_package = f"{dir_path}.tar.gz"
+        compressed_support_package = f"{output_filename}.tar.gz"
         logger.info(f"{self.__class__.__name__} Preparing the support package")
 
         if not os.path.isdir(dir_path):
