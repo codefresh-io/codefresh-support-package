@@ -11,10 +11,15 @@ class Utility:
     def __init__(self) -> None:
         pass
 
-    def write_yaml(self, py_obj: object, filename: str):
-        with open(f"{filename}.yaml", "w") as f:
-            yaml.dump(py_obj, f, sort_keys=False)
-        print("Written to file successfully")
+    def write_yaml(self, py_obj: object, file_name: str):
+        try:
+            with open(f"{file_name}.yaml", "w") as f:
+                yaml.dump(py_obj, f, sort_keys=False)
+            print("Written to file successfully")
+        except Exception as error:
+            logger.error(
+                f"{self.__class__.__name__} {error}\n\nError writing YAML file {file_name}"
+            )
 
     def prepare_package(self, output_filename: str, dir_path: str):
         compressed_support_package = f"{dir_path}.tar.gz"
