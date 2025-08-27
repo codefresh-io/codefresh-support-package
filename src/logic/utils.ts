@@ -30,7 +30,7 @@ export async function preparePackage(dirPath: string) {
     }
 }
 
-export async function processData(dirPath: string, k8sResources: any) {
+export async function processData(dirPath: string, k8sResources: Record<string, () => Promise<any>>) {
     console.log('Processing and Saving Data');
     const k8s = new K8s();
 
