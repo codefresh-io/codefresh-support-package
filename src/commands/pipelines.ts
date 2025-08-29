@@ -1,4 +1,3 @@
-import { preparePackage, processData, writeYaml } from '../logic/utils.ts';
 import { Codefresh, K8s, Utils } from '../logic/mod.ts';
 
 export async function pipelinesCMD(namespace: string, runtime: string) {
@@ -20,7 +19,7 @@ export async function pipelinesCMD(namespace: string, runtime: string) {
             const runtimes = await cf.getAccountRuntimes(cfCreds);
 
             if (runtimes.length !== 0) {
-                runtimes.forEach((re, index) => {
+                runtimes.forEach((re: any, index: number) => {
                     console.log(`${index + 1}. ${re.metadata.name}`);
                 });
                 let selection;
@@ -34,11 +33,11 @@ export async function pipelinesCMD(namespace: string, runtime: string) {
                 } while (isNaN(selection) || selection < 1 || selection > runtimes.length);
 
                 const reSpec = runtimes[selection - 1];
-                await writeYaml(reSpec, 'Runtime_Spec', dirPath);
+                await utils.writeYaml(reSpec, 'Runtime_Spec', dirPath);
             }
         } else {
-            const reSpec = await cf.getRuntimeSpec(cfCreds, runtime);
-            await writeYaml(reSpec, 'Runtime_Spec', dirPath);
+            const reSpec = await cf.getAccountRuntimeSpec(cfCreds, runtime);
+            await utils.writeYaml(reSpec, 'Runtime_Spec', dirPath);
         }
     }
 
