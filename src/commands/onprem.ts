@@ -1,6 +1,6 @@
 import { Codefresh, K8s, Utils } from '../logic/mod.ts';
 
-export async function onpremCMD(namespace: string) {
+export async function onpremCMD(namespace?: string) {
     const cf = new Codefresh();
     const k8s = new K8s();
     const utils = new Utils();

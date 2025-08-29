@@ -1,6 +1,6 @@
 import { K8s, Utils } from '../logic/mod.ts';
 
-export async function ossCMD(namespace: string) {
+export async function ossCMD(namespace?: string) {
     const k8s = new K8s();
     const utils = new Utils();
     const dirPath = `./cf-support-oss-${new Date().toISOString().replace(/[:.]/g, '-').replace(/\.\d{3}Z$/, 'Z')}`;
