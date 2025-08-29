@@ -1,8 +1,7 @@
 import { stringify as toYaml } from '@std/yaml';
 import { getSemaphore } from '@henrygd/semaphore';
-import { K8s } from './mod.ts';
+import { K8s } from '../logic/k8s.ts';
 import { APP_VERSION } from '../main.ts';
-
 
 export class Utils {
     async writeYaml(data: any, name: string, dirPath: string) {
@@ -107,7 +106,6 @@ export class Utils {
                 }));
 
                 await Deno.writeTextFile(`${dirPath}/APP_VERSION`, APP_VERSION);
-
             } catch (error) {
                 if (error instanceof Error) {
                     console.warn(`Failed to fetch ${k8sType}: ${error.message}`);

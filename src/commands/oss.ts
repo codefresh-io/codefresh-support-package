@@ -1,4 +1,5 @@
-import { K8s, Utils } from '../logic/mod.ts';
+import { K8s } from '../logic/mod.ts';
+import { Utils } from '../utils/mod.ts';
 
 export async function ossCMD(namespace?: string) {
     const k8s = new K8s();

@@ -1,7 +1,10 @@
 import { Command } from '@cliffy/command';
 import { gitopsCMD, onpremCMD, ossCMD, pipelinesCMD } from './commands/mod.ts';
+import { logger } from './utils/mod.ts';
 
 export const APP_VERSION = '__APP_VERSION__';
+
+logger.info(`Starting cf-support version ${APP_VERSION}`);
 
 await new Command()
     .name('cf-support')

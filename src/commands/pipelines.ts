@@ -1,4 +1,5 @@
-import { Codefresh, K8s, Utils } from '../logic/mod.ts';
+import { Codefresh, K8s } from '../logic/mod.ts';
+import { Utils } from '../utils/mod.ts';
 
 export async function pipelinesCMD(namespace?: string, runtime?: string) {
     const cf = new Codefresh();
