@@ -28,7 +28,11 @@ export class K8s {
             }
         } while (isNaN(selection) || selection < 1 || selection > namespaces.length);
 
-        return namespaces[selection - 1];
+        const selectedNamespace = namespaces[selection - 1];
+        if (typeof selectedNamespace !== 'string') {
+            throw new Error('Selected namespace is not a string.');
+        }
+        return selectedNamespace;
     }
 
     async getPodLogs(pod: Pod) {
