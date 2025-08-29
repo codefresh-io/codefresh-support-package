@@ -1,8 +1,8 @@
-import { preparePackage, processData } from '../logic/utils.ts';
-import { K8s } from '../logic/mod.ts';
+import { K8s, Utils } from '../logic/mod.ts';
 
-export async function ossCMD(namespace) {
+export async function ossCMD(namespace: string) {
     const k8s = new K8s();
+    const utils = new Utils();
     const dirPath = `./cf-support-oss-${new Date().toISOString().replace(/[:.]/g, '-').replace(/\.\d{3}Z$/, 'Z')}`;
 
     if (!namespace) {
@@ -12,6 +12,6 @@ export async function ossCMD(namespace) {
 
     console.log(`Gathering data in the '${namespace}' namespace for OSS Argo`);
     const k8sResources = k8s.getResources(namespace);
-    await processData(dirPath, k8sResources);
-    await preparePackage(dirPath);
+    await utils.processData(dirPath, k8sResources);
+    await utils.preparePackage(dirPath);
 }

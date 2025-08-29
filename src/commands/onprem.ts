@@ -1,9 +1,9 @@
-import { preparePackage, processData, writeYaml } from '../logic/utils.ts';
-import { Codefresh, K8s } from '../logic/mod.ts';
+import { Codefresh, K8s, Utils } from '../logic/mod.ts';
 
-export async function onpremCMD(namespace) {
+export async function onpremCMD(namespace: string) {
     const cf = new Codefresh();
     const k8s = new K8s();
+    const utils = new Utils();
     const dirPath = `./cf-support-onprem-${new Date().toISOString().replace(/[:.]/g, '-').replace(/\.\d{3}Z$/, 'Z')}`;
 
     const cfCreds = cf.getCredentials();
@@ -32,7 +32,7 @@ export async function onpremCMD(namespace) {
         for (const { name, fetcher } of dataFetchers) {
             try {
                 const data = await fetcher(cfCreds);
-                await writeYaml(data, name, dirPath);
+                await utils.writeYaml(data, name, dirPath);
             } catch (error) {
                 console.error(`Failed to fetch or write ${name}:`, error.message);
             }
@@ -41,6 +41,6 @@ export async function onpremCMD(namespace) {
 
     console.log(`Gathering data in the '${namespace}' namespace for Codefresh OnPrem`);
     const k8sResources = k8s.getResources(namespace);
-    await processData(dirPath, k8sResources);
-    await preparePackage(dirPath);
+    await utils.processData(dirPath, k8sResources);
+    await utils.preparePackage(dirPath);
 }

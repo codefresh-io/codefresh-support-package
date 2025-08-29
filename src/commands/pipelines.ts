@@ -1,9 +1,10 @@
 import { preparePackage, processData, writeYaml } from '../logic/utils.ts';
-import { Codefresh, K8s } from '../logic/mod.ts';
+import { Codefresh, K8s, Utils } from '../logic/mod.ts';
 
-export async function pipelinesCMD(namespace, runtime) {
+export async function pipelinesCMD(namespace: string, runtime: string) {
     const cf = new Codefresh();
     const k8s = new K8s();
+    const utils = new Utils();
     const dirPath = `./cf-support-pipelines-${
         new Date().toISOString().replace(/[:.]/g, '-').replace(/\.\d{3}Z$/, 'Z')
     }`;
@@ -43,6 +44,6 @@ export async function pipelinesCMD(namespace, runtime) {
 
     console.log(`Gathering data in the '${namespace}' namespace for Pipelines Runtime`);
     const k8sResources = k8s.getResources(namespace);
-    await processData(dirPath, k8sResources);
-    await preparePackage(dirPath);
+    await utils.processData(dirPath, k8sResources);
+    await utils.preparePackage(dirPath);
 }

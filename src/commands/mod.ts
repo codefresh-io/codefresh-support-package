@@ -1,6 +1,6 @@
-import { gitopsCMD } from './gitops.js';
-import { pipelinesCMD } from './pipelines.js';
-import { onpremCMD } from './onprem.js';
-import { ossCMD } from './oss.js';
+import { gitopsCMD } from './gitops.ts';
+import { pipelinesCMD } from './pipelines.ts';
+import { onpremCMD } from './onprem.ts';
+import { ossCMD } from './oss.ts';
 
 export { gitopsCMD, onpremCMD, ossCMD, pipelinesCMD };
