@@ -34,7 +34,7 @@ export async function onpremCMD(namespace: string) {
                 const data = await fetcher(cfCreds);
                 await utils.writeYaml(data, name, dirPath);
             } catch (error) {
-                console.error(`Failed to fetch or write ${name}:`, error.message);
+                console.error(`Failed to fetch or write ${name}:\n${error}`);
             }
         }
     }
