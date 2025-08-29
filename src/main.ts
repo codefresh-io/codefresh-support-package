@@ -1,9 +1,11 @@
 import { Command } from '@cliffy/command';
 import { gitopsCMD, onpremCMD, ossCMD, pipelinesCMD } from './commands/mod.ts';
 
+export const APP_VERSION = '__APP_VERSION__';
+
 await new Command()
     .name('cf-support')
-    .version('__APP_VERSION__')
+    .version(APP_VERSION)
     .description('Tool to gather information for Codefresh Support')
     .action(function (this: Command) {
         this.showHelp();
