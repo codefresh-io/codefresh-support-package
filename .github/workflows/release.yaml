@@ -20,7 +20,7 @@ jobs:
 
       - name: Compile and package binaries
         run: |
-          sed -i "s/__APP_VERSION__/$TAG_NAME/g" main.js
+          sed -i "s/__APP_VERSION__/$TAG_NAME/g" ./src/main.ts
           deno task compile
           deno task package
         env:
