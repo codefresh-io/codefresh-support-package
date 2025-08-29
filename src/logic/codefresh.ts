@@ -65,7 +65,7 @@ export class Codefresh {
         return runtimeSpec;
     }
 
-    async getSystemlAccounts(cfCreds: CodefreshCredentials) {
+    async getSystemAccounts(cfCreds: CodefreshCredentials) {
         const response = await fetch(`${cfCreds.baseUrl}/admin/accounts`, {
             method: 'GET',
             headers: cfCreds.headers,
@@ -74,7 +74,7 @@ export class Codefresh {
         return accounts;
     }
 
-    async getASystemRuntimes(cfCreds: CodefreshCredentials) {
+    async getSystemRuntimes(cfCreds: CodefreshCredentials) {
         const response = await fetch(`${cfCreds.baseUrl}/admin/runtime-environments`, {
             method: 'GET',
             headers: cfCreds.headers,
