@@ -14,6 +14,7 @@ export class Utils {
     async preparePackage(dirPath: string, reType: string) {
         try {
             const supportPackageZip = `${dirPath}-${reType}.tar.gz`;
+            console.log('Preparing the Support Package');
             logger.info('Preparing the Support Package');
             const command = new Deno.Command('tar', {
                 args: ['-czf', supportPackageZip, dirPath],
@@ -24,21 +25,27 @@ export class Utils {
                 logger.error(new TextDecoder().decode(stderr));
                 throw new Error(`Failed to create tar.gz file: ${supportPackageZip}. \n ${stderr}`);
             }
+            console.log('Cleaning up temp directory');
             logger.info('Cleaning up temp directory');
             await Deno.remove(dirPath, { recursive: true });
+            console.log(`\nPlease attach ${supportPackageZip} to your support ticket.`);
             logger.info(`\nPlease attach ${supportPackageZip} to your support ticket.`);
         } catch (error) {
+            console.error(error);
             logger.error(error);
+            console.error(`\nPlease manually compress the directory ${dirPath} and attach it to the support ticket.`);
             logger.error(`\nPlease manually compress the directory ${dirPath} and attach it to the support ticket.`);
         }
     }
 
     async processData(dirPath: string, k8sResources: Record<string, () => Promise<any>>) {
+        console.log('Processing and Saving Data');
         logger.info('Processing and Saving Data');
         const k8s = new K8s();
 
         for (const [k8sType, fetcher] of Object.entries(k8sResources)) {
             try {
+                console.log(`Processing Data for ${k8sType}`);
                 logger.info(`Processing Data for ${k8sType}`);
                 const resources = await fetcher();
 
@@ -61,6 +68,7 @@ export class Utils {
                             );
 
                             const logs = await k8s.getPodLogs(pod);
+                            console.log(`Gathering logs for pod ${pod.metadata.name}`);
                             logger.info(`Gathering logs for pod ${pod.metadata.name}`);
                             for (const [containerName, logData] of Object.entries(logs)) {
                                 await Deno.writeTextFile(
@@ -109,6 +117,7 @@ export class Utils {
                 await Deno.writeTextFile(`${dirPath}/APP_VERSION`, APP_VERSION);
             } catch (error) {
                 if (error instanceof Error) {
+                    console.warn(`Failed to fetch ${k8sType}: ${error.message}`);
                     logger.warn(`Failed to fetch ${k8sType}: ${error.message}`);
                     continue;
                 } else {

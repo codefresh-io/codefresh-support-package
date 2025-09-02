@@ -6,6 +6,7 @@ import { StorageV1Api } from '@cloudydeno/kubernetes-apis/storage.k8s.io/v1';
 import { ApiextensionsV1Api } from '@cloudydeno/kubernetes-apis/apiextensions.k8s.io/v1';
 import { logger } from '../utils/mod.ts';
 
+
 const kubeConfig = await autoDetectClient();
 const appsApi = new AppsV1Api(kubeConfig);
 const batchApi = new BatchV1Api(kubeConfig);
@@ -18,19 +19,23 @@ export class K8s {
         const namespaces = (await coreApi.getNamespaceList()).items.map((namespace) => namespace.metadata?.name);
 
         namespaces.forEach((namespace, index) => {
+            console.log(`${index + 1}. ${namespace}`);
             logger.info(`${index + 1}. ${namespace}`);
         });
 
         let selection;
         do {
             selection = Number(prompt('\nWhich Namespace are we using? (Number): '));
+            logger.info(`User selected namespace option: ${selection}`);
             if (isNaN(selection) || selection < 1 || selection > namespaces.length) {
+                console.warn('Invalid selection. Please enter a number corresponding to one of the listed namespaces.');
                 logger.warn('Invalid selection. Please enter a number corresponding to one of the listed namespaces.');
             }
         } while (isNaN(selection) || selection < 1 || selection > namespaces.length);
 
         const selectedNamespace = namespaces[selection - 1];
         if (typeof selectedNamespace !== 'string') {
+            logger.error('Selected namespace is not a string.');
             throw new Error('Selected namespace is not a string.');
         }
         return selectedNamespace;
@@ -58,6 +63,7 @@ export class K8s {
                 }
             }
         } catch (error) {
+            console.warn(error);
             logger.warn(error);
         }
 

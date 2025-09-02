@@ -1,4 +1,4 @@
-import { logger } from './logger.ts';
+import { logger, DIR_PATH } from './logger.ts';
 import { Utils } from './utils.ts';
 
-export { logger, Utils };
+export { logger, DIR_PATH, Utils };

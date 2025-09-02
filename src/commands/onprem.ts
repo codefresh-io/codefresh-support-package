@@ -1,7 +1,7 @@
 import { Codefresh, K8s } from '../logic/mod.ts';
-import { logger, Utils } from '../utils/mod.ts';
+import { logger, DIR_PATH, Utils } from '../utils/mod.ts';
 
-export async function onpremCMD(namespace?: string, dirPath?: string) {
+export async function onpremCMD(namespace?: string) {
     logger.info('Starting OnPrem data collection...');
     const cf = new Codefresh();
     const k8s = new K8s();
@@ -10,10 +10,12 @@ export async function onpremCMD(namespace?: string, dirPath?: string) {
     const cfCreds = cf.getCredentials();
 
     if (cfCreds && cfCreds.baseUrl === 'https://g.codefresh.io/api') {
-        logger.warn(
+        console.error(
             'Cannot gather On-Prem data for Codefresh SaaS. If you need to gather data for Codefresh On-Prem, please update your ./cfconfig context (or Envs) to point to an On-Prem instance.',
         );
-        logger.warn('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
+        logger.error('Cannot gather On-Prem data for Codefresh SaaS. If you need to gather data for Codefresh On-Prem, please update your ./cfconfig context (or Envs) to point to an On-Prem instance.');
+        console.error('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
+        logger.error('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
         return;
     }
 
@@ -33,15 +35,17 @@ export async function onpremCMD(namespace?: string, dirPath?: string) {
         for (const { name, fetcher } of dataFetchers) {
             try {
                 const data = await fetcher(cfCreds);
-                await utils.writeYaml(data, name, dirPath ?? './cf-support');
+                await utils.writeYaml(data, name, DIR_PATH);
             } catch (error) {
+                console.error(`Failed to fetch or write ${name}:\n${error}`);
                 logger.error(`Failed to fetch or write ${name}:\n${error}`);
             }
         }
     }
 
+    console.log(`Gathering data in the '${namespace}' namespace for Codefresh OnPrem`);
     logger.info(`Gathering data in the '${namespace}' namespace for Codefresh OnPrem`);
     const k8sResources = k8s.getResources(namespace);
-    await utils.processData(dirPath ?? './cf-support', k8sResources);
-    await utils.preparePackage(dirPath ?? './cf-support', 'onprem');
+    await utils.processData(DIR_PATH, k8sResources);
+    await utils.preparePackage(DIR_PATH, 'onprem');
 }

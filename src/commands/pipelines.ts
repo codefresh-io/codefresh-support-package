@@ -1,7 +1,7 @@
 import { Codefresh, K8s } from '../logic/mod.ts';
-import { logger, Utils } from '../utils/mod.ts';
+import { logger, DIR_PATH, Utils } from '../utils/mod.ts';
 
-export async function pipelinesCMD(namespace?: string, runtime?: string, dirPath?: string) {
+export async function pipelinesCMD(namespace?: string, runtime?: string) {
     logger.info(`Starting Pipelines data collection...`);
     const cf = new Codefresh();
     const k8s = new K8s();
@@ -25,6 +25,9 @@ export async function pipelinesCMD(namespace?: string, runtime?: string, dirPath
                 do {
                     selection = Number(prompt('\nWhich Pipelines Runtime Are We Working With? (Number): '));
                     if (isNaN(selection) || selection < 1 || selection > runtimes.length) {
+                        console.warn(
+                            'Invalid selection. Please enter a number corresponding to one of the listed runtimes.',
+                        );
                         logger.warn(
                             'Invalid selection. Please enter a number corresponding to one of the listed runtimes.',
                         );
@@ -32,16 +35,17 @@ export async function pipelinesCMD(namespace?: string, runtime?: string, dirPath
                 } while (isNaN(selection) || selection < 1 || selection > runtimes.length);
 
                 const reSpec = runtimes[selection - 1];
-                await utils.writeYaml(reSpec, 'Runtime_Spec', dirPath ?? './cf-support');
+                await utils.writeYaml(reSpec, 'Runtime_Spec', DIR_PATH);
             }
         } else {
             const reSpec = await cf.getAccountRuntimeSpec(cfCreds, runtime);
-            await utils.writeYaml(reSpec, 'Runtime_Spec', dirPath ?? './cf-support');
+            await utils.writeYaml(reSpec, 'Runtime_Spec', DIR_PATH);
         }
     }
 
+    console.log(`Gathering data in the '${namespace}' namespace for Pipelines Runtime`);
     logger.info(`Gathering data in the '${namespace}' namespace for Pipelines Runtime`);
     const k8sResources = k8s.getResources(namespace);
-    await utils.processData(dirPath ?? './cf-support', k8sResources);
-    await utils.preparePackage(dirPath ?? './cf-support', 'pipelines');
+    await utils.processData(DIR_PATH, k8sResources);
+    await utils.preparePackage(DIR_PATH, 'pipelines');
 }
