@@ -1,19 +1,19 @@
 import { Codefresh, K8s } from '../logic/mod.ts';
-import { Utils } from '../utils/mod.ts';
+import { logger, Utils } from '../utils/mod.ts';
 
-export async function onpremCMD(namespace?: string) {
+export async function onpremCMD(namespace?: string, dirPath?: string) {
+    logger.info('Starting OnPrem data collection...');
     const cf = new Codefresh();
     const k8s = new K8s();
     const utils = new Utils();
-    const dirPath = `./cf-support-onprem-${new Date().toISOString().replace(/[:.]/g, '-').replace(/\.\d{3}Z$/, 'Z')}`;
 
     const cfCreds = cf.getCredentials();
 
     if (cfCreds && cfCreds.baseUrl === 'https://g.codefresh.io/api') {
-        console.log(
+        logger.warn(
             'Cannot gather On-Prem data for Codefresh SaaS. If you need to gather data for Codefresh On-Prem, please update your ./cfconfig context (or Envs) to point to an On-Prem instance.',
         );
-        console.log('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
+        logger.warn('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
         return;
     }
 
@@ -33,15 +33,15 @@ export async function onpremCMD(namespace?: string) {
         for (const { name, fetcher } of dataFetchers) {
             try {
                 const data = await fetcher(cfCreds);
-                await utils.writeYaml(data, name, dirPath);
+                await utils.writeYaml(data, name, dirPath ?? './cf-support');
             } catch (error) {
-                console.error(`Failed to fetch or write ${name}:\n${error}`);
+                logger.error(`Failed to fetch or write ${name}:\n${error}`);
             }
         }
     }
 
-    console.log(`Gathering data in the '${namespace}' namespace for Codefresh OnPrem`);
+    logger.info(`Gathering data in the '${namespace}' namespace for Codefresh OnPrem`);
     const k8sResources = k8s.getResources(namespace);
-    await utils.processData(dirPath, k8sResources);
-    await utils.preparePackage(dirPath);
+    await utils.processData(dirPath ?? './cf-support', k8sResources);
+    await utils.preparePackage(dirPath ?? './cf-support', 'onprem');
 }

@@ -2,6 +2,7 @@ import { stringify as toYaml } from '@std/yaml';
 import { getSemaphore } from '@henrygd/semaphore';
 import { K8s } from '../logic/k8s.ts';
 import { APP_VERSION } from '../main.ts';
+import { logger } from './mod.ts';
 
 export class Utils {
     async writeYaml(data: any, name: string, dirPath: string) {
@@ -10,35 +11,35 @@ export class Utils {
         await Deno.writeTextFile(filePath, toYaml(data, { skipInvalid: true }));
     }
 
-    async preparePackage(dirPath: string) {
+    async preparePackage(dirPath: string, reType: string) {
         try {
-            const supportPackageZip = `${dirPath}.tar.gz`;
-            console.log('Preparing the Support Package');
+            const supportPackageZip = `${dirPath}-${reType}.tar.gz`;
+            logger.info('Preparing the Support Package');
             const command = new Deno.Command('tar', {
                 args: ['-czf', supportPackageZip, dirPath],
             });
             const { code, stderr } = await command.output();
 
             if (code !== 0) {
-                console.error(new TextDecoder().decode(stderr));
+                logger.error(new TextDecoder().decode(stderr));
                 throw new Error(`Failed to create tar.gz file: ${supportPackageZip}. \n ${stderr}`);
             }
-            console.log('Cleaning up temp directory');
+            logger.info('Cleaning up temp directory');
             await Deno.remove(dirPath, { recursive: true });
-            console.log(`\nPlease attach ${supportPackageZip} to your support ticket.`);
+            logger.info(`\nPlease attach ${supportPackageZip} to your support ticket.`);
         } catch (error) {
-            console.log(error);
-            console.log(`\nPlease manually compress the directory ${dirPath} and attach it to the support ticket.`);
+            logger.error(error);
+            logger.error(`\nPlease manually compress the directory ${dirPath} and attach it to the support ticket.`);
         }
     }
 
     async processData(dirPath: string, k8sResources: Record<string, () => Promise<any>>) {
-        console.log('Processing and Saving Data');
+        logger.info('Processing and Saving Data');
         const k8s = new K8s();
 
         for (const [k8sType, fetcher] of Object.entries(k8sResources)) {
             try {
-                console.log(`Processing Data for ${k8sType}`);
+                logger.info(`Processing Data for ${k8sType}`);
                 const resources = await fetcher();
 
                 if (!resources || !resources.items || resources.items.length === 0) {
@@ -60,7 +61,7 @@ export class Utils {
                             );
 
                             const logs = await k8s.getPodLogs(pod);
-                            console.log(`Gathering logs for pod ${pod.metadata.name}`);
+                            logger.info(`Gathering logs for pod ${pod.metadata.name}`);
                             for (const [containerName, logData] of Object.entries(logs)) {
                                 await Deno.writeTextFile(
                                     `${dirPath}/${k8sType}/${pod.metadata.name}/log_${containerName}.log`,
@@ -108,7 +109,7 @@ export class Utils {
                 await Deno.writeTextFile(`${dirPath}/APP_VERSION`, APP_VERSION);
             } catch (error) {
                 if (error instanceof Error) {
-                    console.warn(`Failed to fetch ${k8sType}: ${error.message}`);
+                    logger.warn(`Failed to fetch ${k8sType}: ${error.message}`);
                     continue;
                 } else {
                     continue;

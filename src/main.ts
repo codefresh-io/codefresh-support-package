@@ -3,6 +3,11 @@ import { gitopsCMD, onpremCMD, ossCMD, pipelinesCMD } from './commands/mod.ts';
 import { logger } from './utils/mod.ts';
 
 export const APP_VERSION = '__APP_VERSION__';
+export const DIR_PATH = `./cf-support-${new Date().toISOString().replace(/[:.]/g, '-').replace(/\.\d{3}Z$/, 'Z')}`;
+
+logger.initFileLogger(DIR_PATH, {
+    filename: 'cf-support',
+});
 
 logger.info(`Starting cf-support version ${APP_VERSION}`);
 
@@ -21,7 +26,7 @@ await new Command()
                 required: false,
             })
             .action((options: { namespace?: string }) => {
-                gitopsCMD(options.namespace);
+                gitopsCMD(options.namespace, DIR_PATH);
             }),
     )
     .command(
@@ -33,7 +38,7 @@ await new Command()
             })
             .option('-r, --runtime <runtime:string>', 'The name of the Pipelines Runtime', { required: false })
             .action((options: { namespace?: string; runtime?: string }) => {
-                pipelinesCMD(options.namespace, options.runtime);
+                pipelinesCMD(options.namespace, options.runtime, DIR_PATH);
             }),
     )
     .command(
@@ -44,7 +49,7 @@ await new Command()
                 required: false,
             })
             .action((options: { namespace?: string }) => {
-                onpremCMD(options.namespace);
+                onpremCMD(options.namespace, DIR_PATH);
             }),
     )
     .command(
@@ -55,7 +60,7 @@ await new Command()
                 required: false,
             })
             .action((options: { namespace?: string }) => {
-                ossCMD(options.namespace);
+                ossCMD(options.namespace, DIR_PATH);
             }),
     )
     .parse(Deno.args);
