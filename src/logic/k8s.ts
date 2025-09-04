@@ -1,4 +1,4 @@
-import { autoDetectClient } from '@cloudydeno/kubernetes-client';
+import { ClientProviderChain, KubeConfigRestClient, KubectlRawRestClient } from '@cloudydeno/kubernetes-client';
 import { AppsV1Api } from '@cloudydeno/kubernetes-apis/apps/v1';
 import { BatchV1Api } from '@cloudydeno/kubernetes-apis/batch/v1';
 import { CoreV1Api, Pod } from '@cloudydeno/kubernetes-apis/core/v1';
@@ -6,8 +6,15 @@ import { StorageV1Api } from '@cloudydeno/kubernetes-apis/storage.k8s.io/v1';
 import { ApiextensionsV1Api } from '@cloudydeno/kubernetes-apis/apiextensions.k8s.io/v1';
 import { logger } from '../utils/mod.ts';
 
+// ensure that kube config loads first instead of in cluster
+const kubeProviderChain = new ClientProviderChain([
+  ['KubeConfig', () => KubeConfigRestClient.readKubeConfig()],
+  ['InCluster', () => KubeConfigRestClient.forInCluster()],
+  ['KubectlProxy', () => KubeConfigRestClient.forKubectlProxy()],
+  ['KubectlRaw', () => Promise.resolve(new KubectlRawRestClient())],
+]);
 
-const kubeConfig = await autoDetectClient();
+const kubeConfig = await kubeProviderChain.getClient();
 const appsApi = new AppsV1Api(kubeConfig);
 const batchApi = new BatchV1Api(kubeConfig);
 const coreApi = new CoreV1Api(kubeConfig);
