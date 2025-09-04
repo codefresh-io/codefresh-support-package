@@ -1,5 +1,5 @@
 import { K8s } from '../logic/mod.ts';
-import { logger, DIR_PATH, Utils } from '../utils/mod.ts';
+import { DIR_PATH, logger, Utils } from '../utils/mod.ts';
 
 export async function gitopsCMD(namespace?: string) {
     logger.info(`Starting GitOps data collection...`);
@@ -9,7 +9,7 @@ export async function gitopsCMD(namespace?: string) {
         const selected = await k8s.selectNamespace();
         namespace = selected;
     }
-    
+
     console.log(`Gathering data in the '${namespace}' namespace for the GitOps Runtime`);
     logger.info(`Gathering data in the '${namespace}' namespace for the GitOps Runtime`);
     const k8sResources = k8s.getResources(namespace);

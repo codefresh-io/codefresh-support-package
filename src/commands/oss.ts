@@ -1,5 +1,5 @@
 import { K8s } from '../logic/mod.ts';
-import { logger, DIR_PATH, Utils } from '../utils/mod.ts';
+import { DIR_PATH, logger, Utils } from '../utils/mod.ts';
 
 export async function ossCMD(namespace?: string) {
     logger.info(`Starting OSS data collection...`);

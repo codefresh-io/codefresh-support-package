@@ -8,13 +8,13 @@ import { logger } from '../utils/mod.ts';
 
 // ensure that kube config loads first instead of in cluster
 const kubeProviderChain = new ClientProviderChain([
-  ['KubeConfig', () => KubeConfigRestClient.readKubeConfig()],
-  ['InCluster', () => KubeConfigRestClient.forInCluster()],
-  ['KubectlProxy', () => KubeConfigRestClient.forKubectlProxy()],
-  ['KubectlRaw', () => Promise.resolve(new KubectlRawRestClient())],
+    ['KubeConfig', () => KubeConfigRestClient.readKubeConfig()],
+    ['InCluster', () => KubeConfigRestClient.forInCluster()],
+    ['KubectlProxy', () => KubeConfigRestClient.forKubectlProxy()],
+    ['KubectlRaw', () => Promise.resolve(new KubectlRawRestClient())],
 ]);
-
 const kubeConfig = await kubeProviderChain.getClient();
+
 const appsApi = new AppsV1Api(kubeConfig);
 const batchApi = new BatchV1Api(kubeConfig);
 const coreApi = new CoreV1Api(kubeConfig);

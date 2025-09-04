@@ -1,5 +1,5 @@
 import { Codefresh, K8s } from '../logic/mod.ts';
-import { logger, DIR_PATH, Utils } from '../utils/mod.ts';
+import { DIR_PATH, logger, Utils } from '../utils/mod.ts';
 
 export async function onpremCMD(namespace?: string) {
     logger.info('Starting OnPrem data collection...');
@@ -13,7 +13,9 @@ export async function onpremCMD(namespace?: string) {
         console.error(
             'Cannot gather On-Prem data for Codefresh SaaS. If you need to gather data for Codefresh On-Prem, please update your ./cfconfig context (or Envs) to point to an On-Prem instance.',
         );
-        logger.error('Cannot gather On-Prem data for Codefresh SaaS. If you need to gather data for Codefresh On-Prem, please update your ./cfconfig context (or Envs) to point to an On-Prem instance.');
+        logger.error(
+            'Cannot gather On-Prem data for Codefresh SaaS. If you need to gather data for Codefresh On-Prem, please update your ./cfconfig context (or Envs) to point to an On-Prem instance.',
+        );
         console.error('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
         logger.error('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
         return;
