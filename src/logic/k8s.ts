@@ -14,6 +14,7 @@ const kubeProviderChain = new ClientProviderChain([
     ['KubectlProxy', () => KubeConfigRestClient.forKubectlProxy()],
     ['KubectlRaw', () => Promise.resolve(new KubectlRawRestClient())],
 ]);
+
 const kubeConfig = await kubeProviderChain.getClient();
 logger.info('Kube configuration loaded.');
 

@@ -5,7 +5,8 @@ Deno.mkdirSync(DIR_PATH, { recursive: true });
 
 export const logger = new Logger();
 
+logger.disableConsole();
+
 await logger.initFileLogger(DIR_PATH, {
     filename: 'cf-support',
 });
-logger.disableConsole();

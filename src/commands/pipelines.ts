@@ -1,5 +1,5 @@
-import { Codefresh, K8s } from '../logic/mod.ts';
 import { DIR_PATH, logger, Utils } from '../utils/mod.ts';
+import { Codefresh, K8s } from '../logic/mod.ts';
 
 export async function pipelinesCMD(namespace?: string, runtime?: string) {
     logger.info(`Starting Pipelines data collection...`);

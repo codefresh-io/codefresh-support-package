@@ -1,5 +1,5 @@
-import { Codefresh, K8s } from '../logic/mod.ts';
 import { DIR_PATH, logger, Utils } from '../utils/mod.ts';
+import { Codefresh, K8s } from '../logic/mod.ts';
 
 export async function onpremCMD(namespace?: string) {
     logger.info('Starting OnPrem data collection...');

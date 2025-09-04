@@ -1,5 +1,5 @@
-import { K8s } from '../logic/mod.ts';
 import { DIR_PATH, logger, Utils } from '../utils/mod.ts';
+import { K8s } from '../logic/mod.ts';
 
 export async function gitopsCMD(namespace?: string) {
     logger.info(`Starting GitOps data collection...`);
