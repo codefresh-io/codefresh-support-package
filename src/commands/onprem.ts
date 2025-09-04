@@ -22,11 +22,13 @@ export async function onpremCMD(namespace?: string) {
     }
 
     if (!namespace) {
+        logger.info('No namespace provided, prompting user to select one.');
         const selected = await k8s.selectNamespace();
         namespace = selected;
     }
 
     if (cfCreds) {
+        logger.info('Gathering OnPrem system data...');
         const dataFetchers = [
             { name: 'OnPrem_Accounts', fetcher: cf.getSystemAccounts },
             { name: 'OnPrem_Runtimes', fetcher: cf.getSystemRuntimes },
@@ -36,6 +38,7 @@ export async function onpremCMD(namespace?: string) {
 
         for (const { name, fetcher } of dataFetchers) {
             try {
+                logger.info(`Fetching and writing ${name}...`);
                 const data = await fetcher(cfCreds);
                 await utils.writeYaml(data, name, DIR_PATH);
             } catch (error) {

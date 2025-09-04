@@ -6,6 +6,7 @@ export async function gitopsCMD(namespace?: string) {
     const k8s = new K8s();
     const utils = new Utils();
     if (!namespace) {
+        logger.info('No namespace provided, prompting user to select one.');
         const selected = await k8s.selectNamespace();
         namespace = selected;
     }

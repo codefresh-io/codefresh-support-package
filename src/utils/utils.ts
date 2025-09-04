@@ -1,21 +1,26 @@
 import { stringify as toYaml } from '@std/yaml';
 import { getSemaphore } from '@henrygd/semaphore';
 import { K8s } from '../logic/k8s.ts';
-import { APP_VERSION } from '../main.ts';
 import { logger } from './mod.ts';
 
 export class Utils {
+    constructor() {
+        logger.info('Utils class instance created');
+    }
+
     async writeYaml(data: any, name: string, dirPath: string) {
+        logger.info(`Writing YAML file: ${dirPath}/${name}.yaml`);
         await Deno.mkdir(dirPath, { recursive: true });
         const filePath = `${dirPath}/${name}.yaml`;
         await Deno.writeTextFile(filePath, toYaml(data, { skipInvalid: true }));
     }
 
     async preparePackage(dirPath: string, reType: string) {
+        logger.info('Starting to prepare the support package');
         try {
             const supportPackageZip = `${dirPath}-${reType}.tar.gz`;
             console.log('Preparing the Support Package');
-            logger.info('Preparing the Support Package');
+            logger.info(`Preparing the Support Package at ${dirPath}-${reType}.tar.gz`);
             const command = new Deno.Command('tar', {
                 args: ['-czf', supportPackageZip, dirPath],
             });
@@ -113,8 +118,6 @@ export class Utils {
                         semaphore.release();
                     }
                 }));
-
-                await Deno.writeTextFile(`${dirPath}/APP_VERSION`, APP_VERSION);
             } catch (error) {
                 if (error instanceof Error) {
                     console.warn(`Failed to fetch ${k8sType}: ${error.message}`);

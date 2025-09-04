@@ -6,6 +6,7 @@ import { StorageV1Api } from '@cloudydeno/kubernetes-apis/storage.k8s.io/v1';
 import { ApiextensionsV1Api } from '@cloudydeno/kubernetes-apis/apiextensions.k8s.io/v1';
 import { logger } from '../utils/mod.ts';
 
+logger.info('Loading kube configuration...');
 // ensure that kube config loads first instead of in cluster
 const kubeProviderChain = new ClientProviderChain([
     ['KubeConfig', () => KubeConfigRestClient.readKubeConfig()],
@@ -14,15 +15,23 @@ const kubeProviderChain = new ClientProviderChain([
     ['KubectlRaw', () => Promise.resolve(new KubectlRawRestClient())],
 ]);
 const kubeConfig = await kubeProviderChain.getClient();
+logger.info('Kube configuration loaded.');
 
+logger.info('Initializing Kubernetes APIs...');
 const appsApi = new AppsV1Api(kubeConfig);
 const batchApi = new BatchV1Api(kubeConfig);
 const coreApi = new CoreV1Api(kubeConfig);
 const crdApi = new ApiextensionsV1Api(kubeConfig);
 const storageApi = new StorageV1Api(kubeConfig);
+logger.info('Kubernetes APIs initialized.');
 
 export class K8s {
+    constructor() {
+        logger.info('K8s class instance created.');
+    }
+
     async selectNamespace() {
+        logger.info('Fetching available namespaces from the cluster...');
         const namespaces = (await coreApi.getNamespaceList()).items.map((namespace) => namespace.metadata?.name);
 
         namespaces.forEach((namespace, index) => {
@@ -45,6 +54,7 @@ export class K8s {
             logger.error('Selected namespace is not a string.');
             throw new Error('Selected namespace is not a string.');
         }
+        logger.info(`User selected namespace: ${selectedNamespace}`);
         return selectedNamespace;
     }
 
@@ -54,12 +64,16 @@ export class K8s {
         const containers = pod.spec?.containers.map((container) => container.name);
         const logs: Record<string, string> = {};
 
+        logger.info(`Fetching logs for pod: ${podName} in namespace: ${namespace}`);
+
         try {
             if (!podName || !namespace || !containers) {
+                logger.error('Pod is missing required metadata or container specifications.');
                 throw new Error('Pod is missing required metadata or container specifications');
             }
             for (const container of containers) {
                 try {
+                    logger.info(`Fetching logs for container: ${container}`);
                     logs[container] = await coreApi
                         .namespace(namespace)
                         .getPodLog(podName, { container: container, timestamps: true });
@@ -67,6 +81,9 @@ export class K8s {
                     logs[container] = error instanceof Error
                         ? `Error: ${error.message}`
                         : `Unknown error: ${String(error)}`;
+                    logger.warn(
+                        `Failed to fetch logs for container ${container} in pod ${podName}: ${logs[container]}`,
+                    );
                 }
             }
         } catch (error) {
@@ -78,6 +95,7 @@ export class K8s {
     }
 
     async getCrd(type: string, namespace: string) {
+        logger.info(`Fetching CRD for type: ${type} in namespace: ${namespace}`);
         try {
             const crd = await crdApi.getCustomResourceDefinition(type);
 
@@ -97,6 +115,7 @@ export class K8s {
     }
 
     async getSortedEvents(namespace: string) {
+        logger.info(`Fetching and sorting events in namespace: ${namespace}`);
         try {
             const events = await coreApi.namespace(namespace).getEventList();
             events.items = events.items.sort((a, b) => {
@@ -115,12 +134,14 @@ export class K8s {
         } catch (error) {
             if (error instanceof Error) {
                 console.warn(`Failed to fetch events: ${error.message}`);
+                logger.warn(`Failed to fetch events: ${error.message}`);
             }
             return { items: [] }; // Return empty events list
         }
     }
 
     getResources(namespace: string) {
+        logger.info(`Preparing resource fetchers for namespace: ${namespace}`);
         const k8sResourceTypes = {
             'configmaps': () => coreApi.namespace(namespace).getConfigMapList(),
             'cronjobs.batch': () => batchApi.namespace(namespace).getCronJobList(),
