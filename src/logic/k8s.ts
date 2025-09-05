@@ -43,7 +43,7 @@ export class K8s {
             return versionInfo;
         } catch (error) {
             logger.error(`Failed to fetch cluster version: ${error}`);
-            return {error: `Failed to fetch cluster version: ${error}`};
+            return { error: `Failed to fetch cluster version: ${error}` };
         }
     }
 
