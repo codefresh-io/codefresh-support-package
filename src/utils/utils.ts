@@ -20,7 +20,7 @@ export class Utils {
         try {
             const supportPackageZip = `${dirPath}-${reType}.tar.gz`;
             console.log('Preparing the Support Package');
-            logger.info(`Preparing the Support Package at ${dirPath}-${reType}.tar.gz`);
+            logger.info('Preparing the Support Package');
             const command = new Deno.Command('tar', {
                 args: ['-czf', supportPackageZip, dirPath],
             });
