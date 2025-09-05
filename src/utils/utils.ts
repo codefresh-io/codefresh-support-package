@@ -48,6 +48,9 @@ export class Utils {
         logger.info('Processing and Saving Data');
         const k8s = new K8s();
 
+        const clusterVersion = await k8s.getClusterVersion();
+        await this.writeYaml(clusterVersion, 'cluster_version', dirPath);
+
         for (const [k8sType, fetcher] of Object.entries(k8sResources)) {
             try {
                 console.log(`Processing Data for ${k8sType}`);

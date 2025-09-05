@@ -31,6 +31,22 @@ export class K8s {
         logger.info('K8s class instance created.');
     }
 
+    async getClusterVersion() {
+        logger.info('Fetching Kubernetes cluster version...');
+        try {
+            const versionInfo = await kubeConfig.performRequest({
+                method: 'GET',
+                path: '/version',
+                expectJson: true,
+            });
+            logger.info(`Cluster version: ${JSON.stringify(versionInfo)}`);
+            return versionInfo;
+        } catch (error) {
+            logger.error(`Failed to fetch cluster version: ${error}`);
+            return {error: `Failed to fetch cluster version: ${error}`};
+        }
+    }
+
     async selectNamespace() {
         logger.info('Fetching available namespaces from the cluster...');
         const namespaces = (await coreApi.getNamespaceList()).items.map((namespace) => namespace.metadata?.name);
