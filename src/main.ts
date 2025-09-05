@@ -1,11 +1,16 @@
 import { Command } from '@cliffy/command';
-import * as cmd from './src/index.js';
+import { logger } from './utils/mod.ts';
+import { gitopsCMD, onpremCMD, ossCMD, pipelinesCMD } from './commands/mod.ts';
+
+export const APP_VERSION = '__APP_VERSION__';
+
+logger.info(`Starting cf-support version ${APP_VERSION}`);
 
 await new Command()
     .name('cf-support')
-    .version('__APP_VERSION__')
+    .version(APP_VERSION)
     .description('Tool to gather information for Codefresh Support')
-    .action(function () {
+    .action(function (this: Command) {
         this.showHelp();
     })
     .command(
@@ -15,8 +20,8 @@ await new Command()
             .option('-n, --namespace <namespace:string>', 'The namespace where the GitOps Runtime is installed', {
                 required: false,
             })
-            .action((options) => {
-                cmd.gitops(options.namespace);
+            .action((options: { namespace?: string }) => {
+                gitopsCMD(options.namespace);
             }),
     )
     .command(
@@ -27,8 +32,8 @@ await new Command()
                 required: false,
             })
             .option('-r, --runtime <runtime:string>', 'The name of the Pipelines Runtime', { required: false })
-            .action((options) => {
-                cmd.pipelines(options.namespace, options.runtime);
+            .action((options: { namespace?: string; runtime?: string }) => {
+                pipelinesCMD(options.namespace, options.runtime);
             }),
     )
     .command(
@@ -38,8 +43,8 @@ await new Command()
             .option('-n, --namespace <namespace:string>', 'The namespace where Codefresh OnPrem is installed', {
                 required: false,
             })
-            .action((options) => {
-                cmd.onprem(options.namespace);
+            .action((options: { namespace?: string }) => {
+                onpremCMD(options.namespace);
             }),
     )
     .command(
@@ -49,8 +54,8 @@ await new Command()
             .option('-n, --namespace <namespace:string>', 'The namespace where the OSS ArgoCD is installed', {
                 required: false,
             })
-            .action((options) => {
-                cmd.oss(options.namespace);
+            .action((options: { namespace?: string }) => {
+                ossCMD(options.namespace);
             }),
     )
     .parse(Deno.args);
