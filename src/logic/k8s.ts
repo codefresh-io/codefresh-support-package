@@ -168,6 +168,7 @@ export class K8s {
             'jobs.batch': () => batchApi.namespace(namespace).getJobList(),
             'nodes': () => coreApi.getNodeList(),
             'pods': () => coreApi.namespace(namespace).getPodList(),
+            'secrets': () => coreApi.namespace(namespace).getSecretList(),
             'serviceaccounts': () => coreApi.namespace(namespace).getServiceAccountList(),
             'services': () => coreApi.namespace(namespace).getServiceList(),
             'statefulsets.apps': () => appsApi.namespace(namespace).getStatefulSetList(),

@@ -63,6 +63,21 @@ export class Utils {
 
                 const semaphore = getSemaphore(k8sType, 10);
 
+                if (k8sType == 'secrets') {
+                    for (const secret of resources.items) {
+                        await semaphore.acquire();
+                        try {
+                            delete secret.metadata.managedFields;
+                            logger.info(`Redacting data for secret ${secret.metadata.name}`);
+                            secret.data = { 'REDACTED': 'Data is redacted by the support package' };
+                            await this.writeYaml(secret, `${secret.metadata.name}_get`, `${dirPath}/${k8sType}`);
+                        } finally {
+                            semaphore.release();
+                        }
+                    }
+                    continue;
+                }
+
                 if (k8sType == 'pods') {
                     for (const pod of resources.items) {
                         await semaphore.acquire();
