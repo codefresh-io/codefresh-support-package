@@ -1,22 +1,6 @@
 import { parse } from '@std/yaml';
 import { logger } from '../utils/mod.ts';
-
-interface CodefreshContext {
-    name: string;
-    token: string;
-    type: string;
-    url: string;
-}
-
-interface CodefreshConfig {
-    contexts: Record<string, CodefreshContext>;
-    'current-context': string;
-}
-
-interface CodefreshCredentials {
-    headers: { Authorization: string };
-    baseUrl: string;
-}
+import { CodefreshConfig, CodefreshCredentials } from '../models/mod.ts';
 
 export class Codefresh {
     constructor() {
