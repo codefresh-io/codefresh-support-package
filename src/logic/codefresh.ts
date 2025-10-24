@@ -19,6 +19,7 @@ export class Codefresh {
                 headers: { Authorization: envToken },
                 baseUrl: `${envUrl}/api`,
             };
+            return cf_creds;
         }
 
         const configPath = Deno.build.os === 'windows'
