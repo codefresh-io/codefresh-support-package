@@ -23,6 +23,30 @@ The binary is built on using `ubuntu-latest`.  You can find what is included in 
 
 ## Usage
 
+### Main Help
+
+```shell
+Usage:   cf-support
+Version: vX.X.X
+
+Description:
+
+  Tool to gather information for Codefresh Support
+
+Options:
+
+  -h, --help     - Show this help.
+  -V, --version  - Show the version number for this program.
+
+Commands:
+
+  gitops     - Collect data for the Codefresh GitOps Runtime
+  pipelines  - Collect data for the Codefresh Pipelines Runtime
+  onprem     - Collect data for the Codefresh OnPrem Installation
+  oss        - Collect data for the Open Source ArgoCD
+  
+```
+
 ### macOS - arm64
 
 ```shell
@@ -90,8 +114,20 @@ chmod +x cf-support
 ### Windows - amd6
 
 1. Go the the [Latest](https://github.com/codefresh-io/codefresh-support-package/releases/latest) release.
-1. Download the cf-support_windows_amd64.zip file
+1. Download the cf-support_windows_amd64.zip file and extract the `.exe`
 1. Run the `.exe` file via CMD or PowerShell
+   - Do not use the ISE version of PowerShell
+
+```powershell
+# CMD
+C:\Users\Administrator\Downloads>cf-support_windows_amd64.exe
+```
+
+```powershell
+# PowerShell
+
+PS C:\Users\Administrator\Downloads> .\cf-support_windows_amd64.exe
+```
 
 ## How to Release a New Version
 
