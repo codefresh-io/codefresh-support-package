@@ -46,7 +46,7 @@ export class Codefresh {
                 return null;
             }
         }
-        
+
         return cf_creds;
     }
 
@@ -57,10 +57,10 @@ export class Codefresh {
             method: 'GET',
             headers: cfCreds.headers,
         });
-        
+
         if (!response.ok) {
             logger.error(`Invalid Codefresh credentials. Status: ${response.status}`);
-            return false
+            return false;
         }
         logger.info('Codefresh credentials are valid.');
         return true;
@@ -73,7 +73,7 @@ export class Codefresh {
             headers: cfCreds.headers,
         });
         const runtimes = await response.json();
-        console.debug(runtimes)
+        console.debug(runtimes);
         return runtimes;
     }
 
