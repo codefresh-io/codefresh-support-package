@@ -52,14 +52,13 @@ export class Codefresh {
 
     async validateCredentials(cfCreds: CodefreshCredentials) {
         logger.info('Validating Codefresh credentials...');
-        const tokenID = cfCreds.headers['Authorization'].split('.')[0];
-        const response = await fetch(`${cfCreds.baseUrl}/auth/key/${tokenID}`, {
+        const response = await fetch(`${cfCreds.baseUrl}/runtime-environments`, {
             method: 'GET',
             headers: cfCreds.headers,
         });
 
         if (!response.ok) {
-            logger.error(`Invalid Codefresh credentials. Status: ${response.status}`);
+            logger.error(`Invalid Codefresh credentials. Status: ${JSON.stringify(await response.json())}`);
             return false;
         }
         logger.info('Codefresh credentials are valid.');
