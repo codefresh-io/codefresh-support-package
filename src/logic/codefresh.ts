@@ -73,7 +73,6 @@ export class Codefresh {
             headers: cfCreds.headers,
         });
         const runtimes = await response.json();
-        console.debug(runtimes);
         return runtimes;
     }
 
