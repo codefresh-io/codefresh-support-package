@@ -6,7 +6,7 @@ export async function pipelinesCMD(namespace?: string, runtime?: string) {
     const cf = new Codefresh();
     const k8s = new K8s();
     const utils = new Utils();
-    const cfCreds = cf.getCredentials();
+    const cfCreds = await cf.getCredentials();
 
     if (!namespace) {
         logger.info('No namespace provided, prompting user to select one.');

@@ -7,7 +7,7 @@ export class Codefresh {
         logger.info('Codefresh class instance created.');
     }
 
-    getCredentials() {
+    async getCredentials() {
         logger.info('Fetching Codefresh credentials...');
         const envToken = Deno.env.get('CF_API_KEY');
         const envUrl = Deno.env.get('CF_URL');
@@ -15,10 +15,15 @@ export class Codefresh {
 
         if (envToken && envUrl) {
             logger.info('Using Codefresh credentials from environment variables.');
+            const formattedUrl = envUrl.endsWith('/') ? envUrl.slice(0, -1) : envUrl;
             cf_creds = {
                 headers: { Authorization: envToken },
-                baseUrl: `${envUrl}/api`,
+                baseUrl: `${formattedUrl}/api`,
             };
+            const isValid = await this.validateCredentials(cf_creds);
+            if (!isValid) {
+                return null;
+            }
             return cf_creds;
         }
 
@@ -36,8 +41,29 @@ export class Codefresh {
                 headers: { Authorization: currentContext.token },
                 baseUrl: `${currentContext.url}/api`,
             };
+            const isValid = await this.validateCredentials(cf_creds);
+            if (!isValid) {
+                return null;
+            }
         }
+        
         return cf_creds;
+    }
+
+    async validateCredentials(cfCreds: CodefreshCredentials) {
+        logger.info('Validating Codefresh credentials...');
+        const tokenID = cfCreds.headers['Authorization'].split('.')[0];
+        const response = await fetch(`${cfCreds.baseUrl}/auth/key/${tokenID}`, {
+            method: 'GET',
+            headers: cfCreds.headers,
+        });
+        
+        if (!response.ok) {
+            logger.error(`Invalid Codefresh credentials. Status: ${response.status}`);
+            return false
+        }
+        logger.info('Codefresh credentials are valid.');
+        return true;
     }
 
     async getAccountRuntimes(cfCreds: CodefreshCredentials) {
@@ -47,6 +73,7 @@ export class Codefresh {
             headers: cfCreds.headers,
         });
         const runtimes = await response.json();
+        console.debug(runtimes)
         return runtimes;
     }
 
