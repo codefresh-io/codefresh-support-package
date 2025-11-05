@@ -7,7 +7,7 @@ export async function onpremCMD(namespace?: string) {
     const k8s = new K8s();
     const utils = new Utils();
 
-    const cfCreds = cf.getCredentials();
+    const cfCreds = await cf.getCredentials();
 
     if (cfCreds && cfCreds.baseUrl === 'https://g.codefresh.io/api') {
         console.error(
