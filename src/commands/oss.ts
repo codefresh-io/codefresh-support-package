@@ -1,20 +1,20 @@
-import { DIR_PATH, logger, Utils } from '../utils/mod.ts';
-import { K8s } from '../logic/mod.ts';
+import { Command } from '@cliffy/command';
+import { getResources } from '../services/kubernetes/resources.ts';
+import { collectData } from '../services/kubernetes/collector.ts';
+import { selectNamespace } from '../utils/select-namespace.ts';
+import { createDirPath, preparePackage } from '../utils/files.ts';
 
-export async function ossCMD(namespace?: string) {
-    logger.info(`Starting OSS data collection...`);
-    const k8s = new K8s();
-    const utils = new Utils();
+export const ossCommand = new Command()
+    .description('Collect data for the Open Source ArgoCD')
+    .option('-n, --namespace <namespace:string>', 'The namespace where the OSS ArgoCD is installed')
+    .action(async (options: { namespace?: string }) => {
+        let namespace = options.namespace;
 
-    if (!namespace) {
-        logger.info('No namespace provided, prompting user to select one.');
-        const selected = await k8s.selectNamespace();
-        namespace = selected;
-    }
+        if (!namespace) namespace = await selectNamespace();
 
-    console.log(`Gathering data in the '${namespace}' namespace for OSS Argo`);
-    logger.info(`Gathering data in the '${namespace}' namespace for OSS Argo`);
-    const k8sResources = k8s.getResources(namespace);
-    await utils.processData(DIR_PATH, k8sResources);
-    await utils.preparePackage(DIR_PATH, 'oss');
-}
+        const dirPath = createDirPath('oss');
+        console.log(`Gathering data in the '${namespace}' namespace for OSS ArgoCD`);
+        const k8sResources = getResources(namespace);
+        await collectData(dirPath, k8sResources);
+        await preparePackage(dirPath);
+    });

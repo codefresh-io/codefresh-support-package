@@ -1,12 +1,19 @@
 import { stringify as toYaml } from '@std/yaml';
 
+export function createDirPath(command: string): string {
+    const timestamp = new Date().toISOString()
+        .replace(/[:.]/g, '-')
+        .replace(/\.\d{3}Z$/, 'Z');
+    return `./cf-${command}-${timestamp}`;
+}
+
 export async function writeYaml(data: unknown, name: string, dirPath: string) {
     await Deno.mkdir(dirPath, { recursive: true });
     await Deno.writeTextFile(`${dirPath}/${name}.yaml`, toYaml(data, { skipInvalid: true }));
 }
 
-export async function preparePackage(dirPath: string, reType: string) {
-    const supportPackageZip = `${dirPath}-${reType}.tar.gz`;
+export async function preparePackage(dirPath: string) {
+    const supportPackageZip = `${dirPath}.tar.gz`;
     console.log('Preparing the Support Package');
 
     const command = new Deno.Command('tar', {
