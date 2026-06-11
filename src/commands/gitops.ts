@@ -1,7 +1,7 @@
 import { Command } from '@cliffy/command';
 import { getResources } from '../services/kubernetes/resources.ts';
 import { collectData } from '../services/kubernetes/collector.ts';
-import { selectNamespace } from '../utils/select-namespace.ts';
+import { selectNamespace } from '../utils/namespace.ts';
 import { createDirPath, preparePackage } from '../utils/files.ts';
 
 export const gitopsCommand = new Command()

@@ -8,7 +8,7 @@ import {
 } from '../services/codefresh/system.ts';
 import { getResources } from '../services/kubernetes/resources.ts';
 import { collectData } from '../services/kubernetes/collector.ts';
-import { selectNamespace } from '../utils/select-namespace.ts';
+import { selectNamespace } from '../utils/namespace.ts';
 import { createDirPath, preparePackage, writeYaml } from '../utils/files.ts';
 
 const SAAS_URL = 'https://g.codefresh.io/api';
