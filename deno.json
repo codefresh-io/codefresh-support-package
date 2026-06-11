@@ -21,12 +21,12 @@
         "package": "cd bin && tar -czvf ./cf-support_linux_amd64.tar.gz cf-support_linux_amd64 && tar -czvf ./cf-support_linux_arm64.tar.gz ./cf-support_linux_arm64 && tar -czvf ./cf-support_darwin_amd64.tar.gz ./cf-support_darwin_amd64 && tar -czvf ./cf-support_darwin_arm64.tar.gz ./cf-support_darwin_arm64 && zip ./cf-support_windows_amd64.zip ./cf-support_windows_amd64.exe"
     },
     "imports": {
-        "@cliffy/command": "jsr:@cliffy/command@1.0.0-rc.8",
-        "@cloudydeno/kubernetes-apis": "jsr:@cloudydeno/kubernetes-apis@0.6.0",
-        "@cloudydeno/kubernetes-client": "jsr:@cloudydeno/kubernetes-client@0.7.7",
-        "@deno-lib/logger": "jsr:@deno-lib/logger@^1.1.9",
-        "@deno-library/logger": "jsr:@deno-library/logger@^1.2.0",
-        "@henrygd/semaphore": "jsr:@henrygd/semaphore@^0.1.0",
-        "@std/yaml": "jsr:@std/yaml@1.0.10"
+        "@cliffy/command": "jsr:@cliffy/command@1.2.1",
+        "@cloudydeno/kubernetes-apis": "jsr:@cloudydeno/kubernetes-apis@0.7.2",
+        "@cloudydeno/kubernetes-client": "jsr:@cloudydeno/kubernetes-client@0.8.1",
+        "@deno-lib/logger": "jsr:@deno-lib/logger@1.1.9",
+        "@deno-library/logger": "jsr:@deno-library/logger@1.2.0",
+        "@henrygd/semaphore": "jsr:@henrygd/semaphore@0.1.0",
+        "@std/yaml": "jsr:@std/yaml@1.1.1"
     }
 }

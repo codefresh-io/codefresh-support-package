@@ -1,74 +1,72 @@
 {
   "version": "5",
   "specifiers": {
-    "jsr:@cliffy/command@1.0.0-rc.8": "1.0.0-rc.8",
-    "jsr:@cliffy/flags@1.0.0-rc.8": "1.0.0-rc.8",
-    "jsr:@cliffy/internal@1.0.0-rc.8": "1.0.0-rc.8",
-    "jsr:@cliffy/table@1.0.0-rc.8": "1.0.0-rc.8",
-    "jsr:@cloudydeno/kubernetes-apis@0.6.0": "0.6.0",
-    "jsr:@cloudydeno/kubernetes-client@0.7": "0.7.7",
-    "jsr:@cloudydeno/kubernetes-client@0.7.7": "0.7.7",
-    "jsr:@cloudydeno/stream-observables@1": "1.4.1",
-    "jsr:@deno-lib/logger@^1.1.9": "1.1.9",
-    "jsr:@deno-library/logger@*": "1.2.0",
-    "jsr:@deno-library/logger@^1.2.0": "1.2.0",
-    "jsr:@henrygd/semaphore@0.1": "0.1.0",
+    "jsr:@cliffy/command@1.2.1": "1.2.1",
+    "jsr:@cliffy/flags@1.2.1": "1.2.1",
+    "jsr:@cliffy/internal@1.2.1": "1.2.1",
+    "jsr:@cliffy/table@1.2.1": "1.2.1",
+    "jsr:@cloudydeno/kubernetes-apis@0.7.2": "0.7.2",
+    "jsr:@cloudydeno/kubernetes-client@0.8": "0.8.1",
+    "jsr:@cloudydeno/kubernetes-client@0.8.1": "0.8.1",
+    "jsr:@deno-lib/logger@1.1.9": "1.1.9",
+    "jsr:@deno-library/logger@1.2.0": "1.2.0",
+    "jsr:@henrygd/semaphore@0.1.0": "0.1.0",
     "jsr:@std/fmt@1.0.3": "1.0.3",
-    "jsr:@std/fmt@~1.0.2": "1.0.8",
-    "jsr:@std/fs@^1.0.6": "1.0.19",
-    "jsr:@std/internal@^1.0.10": "1.0.10",
-    "jsr:@std/internal@^1.0.9": "1.0.10",
-    "jsr:@std/path@1": "1.1.2",
-    "jsr:@std/path@^1.1.1": "1.1.2",
-    "jsr:@std/streams@1": "1.0.12",
-    "jsr:@std/text@~1.0.7": "1.0.16",
-    "jsr:@std/yaml@1": "1.0.10",
-    "jsr:@std/yaml@1.0.10": "1.0.10",
-    "npm:@types/node@*": "22.15.15"
+    "jsr:@std/fmt@^1.0.10": "1.0.10",
+    "jsr:@std/fs@^1.0.6": "1.0.24",
+    "jsr:@std/internal@^1.0.14": "1.0.14",
+    "jsr:@std/path@1": "1.1.5",
+    "jsr:@std/path@^1.1.5": "1.1.5",
+    "jsr:@std/semver@^1.0.8": "1.0.8",
+    "jsr:@std/streams@1": "1.1.1",
+    "jsr:@std/text@^1.0.19": "1.0.19",
+    "jsr:@std/yaml@1": "1.1.1",
+    "jsr:@std/yaml@1.1.1": "1.1.1",
+    "npm:@types/node@*": "22.15.15",
+    "npm:undici@7": "7.27.2"
   },
   "jsr": {
-    "@cliffy/command@1.0.0-rc.8": {
-      "integrity": "758147790797c74a707e5294cc7285df665422a13d2a483437092ffce40b5557",
+    "@cliffy/command@1.2.1": {
+      "integrity": "b7b017c81560d96580ea810c8564566884d8194416f6fc06bfdc8846e8fd590f",
       "dependencies": [
         "jsr:@cliffy/flags",
         "jsr:@cliffy/internal",
         "jsr:@cliffy/table",
-        "jsr:@std/fmt@~1.0.2",
+        "jsr:@std/fmt@^1.0.10",
+        "jsr:@std/semver",
         "jsr:@std/text"
       ]
     },
-    "@cliffy/flags@1.0.0-rc.8": {
-      "integrity": "0f1043ce6ef037ba1cb5fe6b1bcecb25dc2f29371a1c17f278ab0f45e4b6f46c",
+    "@cliffy/flags@1.2.1": {
+      "integrity": "10034920ef7595db586fecec5a3b10a4ec800c513cbbc368414cd748dac706fb",
       "dependencies": [
+        "jsr:@cliffy/internal",
         "jsr:@std/text"
       ]
     },
-    "@cliffy/internal@1.0.0-rc.8": {
-      "integrity": "34cdf2fad9b084b5aed493b138d573f52d4e988767215f7460daf0b918ff43d8"
+    "@cliffy/internal@1.2.1": {
+      "integrity": "e398f41c6839d3d4d249c963bfcb1058013091425926d53a3cb482b1ca70684b"
     },
-    "@cliffy/table@1.0.0-rc.8": {
-      "integrity": "8bbcdc2ba5e0061b4b13810a24e6f5c6ab19c09f0cce9eb691ccd76c7c6c9db5",
+    "@cliffy/table@1.2.1": {
+      "integrity": "be333e62f2c754f8bf75a38c8177515b152040572c9f75298e9bcef1314b82ff",
       "dependencies": [
-        "jsr:@std/fmt@~1.0.2"
+        "jsr:@std/fmt@^1.0.10"
       ]
     },
-    "@cloudydeno/kubernetes-apis@0.6.0": {
-      "integrity": "d8b8402632f4295713606841b7041fd6891ef3f6b1e789b544b3332e72c9c5a1",
+    "@cloudydeno/kubernetes-apis@0.7.2": {
+      "integrity": "12dd29857228a695f75cbf91c8e630ad6ae73de174823f135a42d9b0a7cad608",
       "dependencies": [
-        "jsr:@cloudydeno/kubernetes-client@0.7"
+        "jsr:@cloudydeno/kubernetes-client@0.8"
       ]
     },
-    "@cloudydeno/kubernetes-client@0.7.7": {
-      "integrity": "631ad5d265b03936cf169860bbe3595e336c1e4730ab9bb9d2fe6f7e7fd095ee",
+    "@cloudydeno/kubernetes-client@0.8.1": {
+      "integrity": "d7baa0166ee2c375c23d89e285831ca6569ea14a3cfb4434460c96e71b08d23e",
       "dependencies": [
-        "jsr:@cloudydeno/stream-observables",
         "jsr:@std/path@1",
         "jsr:@std/streams",
-        "jsr:@std/yaml@1"
+        "jsr:@std/yaml@1",
+        "npm:undici"
       ]
-    },
-    "@cloudydeno/stream-observables@1.4.1": {
-      "integrity": "555aa3d786fcfd066d096fc943ea47afc688618e95146e615705e981008f57c0"
     },
     "@deno-lib/logger@1.1.9": {
       "integrity": "b03b8044d5ed655a73261aebae0d9f998823f8776f7c7e172e8f4b44f2688ab2",
@@ -90,39 +88,42 @@
     "@std/fmt@1.0.3": {
       "integrity": "97765c16aa32245ff4e2204ecf7d8562496a3cb8592340a80e7e554e0bb9149f"
     },
-    "@std/fmt@1.0.8": {
-      "integrity": "71e1fc498787e4434d213647a6e43e794af4fd393ef8f52062246e06f7e372b7"
+    "@std/fmt@1.0.10": {
+      "integrity": "90dfba288802ac6de82fb31d0917eb9e4450b9925b954d5e51fc29ac07419db5"
     },
-    "@std/fs@1.0.19": {
-      "integrity": "051968c2b1eae4d2ea9f79a08a3845740ef6af10356aff43d3e2ef11ed09fb06",
+    "@std/fs@1.0.24": {
+      "integrity": "f3061b45b81673a2bece689da041df32d174be064c89eb6397fb5718d3fb7877",
       "dependencies": [
-        "jsr:@std/internal@^1.0.9",
-        "jsr:@std/path@^1.1.1"
+        "jsr:@std/internal",
+        "jsr:@std/path@^1.1.5"
       ]
     },
-    "@std/internal@1.0.10": {
-      "integrity": "e3be62ce42cab0e177c27698e5d9800122f67b766a0bea6ca4867886cbde8cf7"
+    "@std/internal@1.0.14": {
+      "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
     },
-    "@std/path@1.1.2": {
-      "integrity": "c0b13b97dfe06546d5e16bf3966b1cadf92e1cc83e56ba5476ad8b498d9e3038",
+    "@std/path@1.1.5": {
+      "integrity": "ccea00982ea28c36becaf6e62f855406c76a8c32d462f66f415bbb7d83a271bc",
       "dependencies": [
-        "jsr:@std/internal@^1.0.10"
+        "jsr:@std/internal"
       ]
+    },
+    "@std/semver@1.0.8": {
+      "integrity": "dc830e8b8b6a380c895d53fbfd1258dc253704ca57bbe1629ac65fd7830179b7"
     },
     "@std/streams@1.0.10": {
       "integrity": "75c0b1431873cd0d8b3d679015220204d36d3c7420d93b60acfc379eb0dc30af"
     },
-    "@std/streams@1.0.12": {
-      "integrity": "ae925fa1dc459b1abf5cbaa28cc5c7b0485853af3b2a384b0dc22d86e59dfbf4"
+    "@std/streams@1.1.1": {
+      "integrity": "92556d350e537e9dce527a6d08f6f15be3ff65e656079dea69d15252187c7613"
     },
     "@std/text@1.0.15": {
       "integrity": "91f5cc1e12779a3d95f1be34e763f9c28a75a078b7360e6fcaef0d8d9b1e3e7f"
     },
-    "@std/text@1.0.16": {
-      "integrity": "ddb9853b75119a2473857d691cf1ec02ad90793a2e8b4a4ac49d7354281a0cf8"
+    "@std/text@1.0.19": {
+      "integrity": "003a0e032d360e8c3a4e0410fb792c77a66bd6553fee9d60c6ec1bce30d29223"
     },
-    "@std/yaml@1.0.10": {
-      "integrity": "245706ea3511cc50c8c6d00339c23ea2ffa27bd2c7ea5445338f8feff31fa58e"
+    "@std/yaml@1.1.1": {
+      "integrity": "a57665ecf3d17b926380593a56625d8a10cc7281802f1e993b5ebc94a48e71f8"
     }
   },
   "npm": {
@@ -134,17 +135,20 @@
     },
     "undici-types@6.21.0": {
       "integrity": "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="
+    },
+    "undici@7.27.2": {
+      "integrity": "sha512-uZsKNuzQxDMUY6M3pIMvy5tvlGmtq8XJ2oLAkfRKGNu+1VQAIvLy2xIVG5ATZl5wDXl/tddByAWCizRbOme+TA=="
     }
   },
   "workspace": {
     "dependencies": [
-      "jsr:@cliffy/command@1.0.0-rc.8",
-      "jsr:@cloudydeno/kubernetes-apis@0.6.0",
-      "jsr:@cloudydeno/kubernetes-client@0.7.7",
-      "jsr:@deno-lib/logger@^1.1.9",
-      "jsr:@deno-library/logger@^1.2.0",
-      "jsr:@henrygd/semaphore@0.1",
-      "jsr:@std/yaml@1.0.10"
+      "jsr:@cliffy/command@1.2.1",
+      "jsr:@cloudydeno/kubernetes-apis@0.7.2",
+      "jsr:@cloudydeno/kubernetes-client@0.8.1",
+      "jsr:@deno-lib/logger@1.1.9",
+      "jsr:@deno-library/logger@1.2.0",
+      "jsr:@henrygd/semaphore@0.1.0",
+      "jsr:@std/yaml@1.1.1"
     ]
   }
 }
