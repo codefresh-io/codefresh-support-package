@@ -1,15 +1,20 @@
 import { getSemaphore } from '@henrygd/semaphore';
+import { logger } from '../../utils/logger.ts';
 import { getClusterVersion } from './cluster.ts';
 import { getPodLogs } from './pods.ts';
 import { writeYaml } from '../../utils/files.ts';
 
 export async function collectData(dirPath: string, k8sResources: Record<string, () => Promise<any>>) {
+    console.log('Starting data collection for Kubernetes resources');
+    logger.info('Starting data collection for Kubernetes resources');
+
     const clusterVersion = await getClusterVersion();
     await writeYaml(clusterVersion, 'cluster_version', dirPath);
 
     for (const [k8sType, fetcher] of Object.entries(k8sResources)) {
         try {
             console.log(`Processing Data for ${k8sType}`);
+            logger.info(`Processing Data for ${k8sType}`);
             const resources = await fetcher();
 
             if (!resources?.items?.length) continue;
@@ -17,9 +22,11 @@ export async function collectData(dirPath: string, k8sResources: Record<string, 
             const semaphore = getSemaphore(k8sType, 10);
 
             if (k8sType === 'secrets') {
+                console.log('Redacting secrets data');
                 for (const secret of resources.items) {
                     await semaphore.acquire();
                     try {
+                        logger.info(`Redacting secret ${secret.metadata.name}`);
                         delete secret.metadata.managedFields;
                         delete secret.metadata.annotations?.['kubectl.kubernetes.io/last-applied-configuration'];
                         secret.data = { 'REDACTED': 'Data is redacted by the support package' };
@@ -37,8 +44,6 @@ export async function collectData(dirPath: string, k8sResources: Record<string, 
                     try {
                         delete pod.metadata.managedFields;
                         await writeYaml(pod, `spec_${pod.metadata.name}`, `${dirPath}/${k8sType}/${pod.metadata.name}`);
-
-                        console.log(`Gathering logs for pod ${pod.metadata.name}`);
                         const logs = await getPodLogs(pod);
                         for (const [containerName, logData] of Object.entries(logs)) {
                             await Deno.writeTextFile(

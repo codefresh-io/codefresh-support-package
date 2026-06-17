@@ -8,10 +8,14 @@
     "jsr:@cloudydeno/kubernetes-apis@0.7.2": "0.7.2",
     "jsr:@cloudydeno/kubernetes-client@0.8": "0.8.1",
     "jsr:@cloudydeno/kubernetes-client@0.8.1": "0.8.1",
+    "jsr:@deno-library/logger@1.2.0": "1.2.0",
     "jsr:@henrygd/semaphore@0.1.0": "0.1.0",
+    "jsr:@std/fmt@1.0.3": "1.0.3",
     "jsr:@std/fmt@^1.0.10": "1.0.10",
+    "jsr:@std/fs@^1.0.6": "1.0.24",
     "jsr:@std/internal@^1.0.14": "1.0.14",
     "jsr:@std/path@1": "1.1.5",
+    "jsr:@std/path@^1.1.5": "1.1.5",
     "jsr:@std/semver@^1.0.8": "1.0.8",
     "jsr:@std/streams@1": "1.1.1",
     "jsr:@std/text@^1.0.19": "1.0.19",
@@ -27,7 +31,7 @@
         "jsr:@cliffy/flags",
         "jsr:@cliffy/internal",
         "jsr:@cliffy/table",
-        "jsr:@std/fmt",
+        "jsr:@std/fmt@^1.0.10",
         "jsr:@std/semver",
         "jsr:@std/text"
       ]
@@ -45,7 +49,7 @@
     "@cliffy/table@1.2.1": {
       "integrity": "be333e62f2c754f8bf75a38c8177515b152040572c9f75298e9bcef1314b82ff",
       "dependencies": [
-        "jsr:@std/fmt"
+        "jsr:@std/fmt@^1.0.10"
       ]
     },
     "@cloudydeno/kubernetes-apis@0.7.2": {
@@ -57,17 +61,34 @@
     "@cloudydeno/kubernetes-client@0.8.1": {
       "integrity": "d7baa0166ee2c375c23d89e285831ca6569ea14a3cfb4434460c96e71b08d23e",
       "dependencies": [
-        "jsr:@std/path",
+        "jsr:@std/path@1",
         "jsr:@std/streams",
         "jsr:@std/yaml@1",
         "npm:undici"
       ]
     },
+    "@deno-library/logger@1.2.0": {
+      "integrity": "c6f0371cb2d08c0a7b82d30d494fac5d25f115695c63a3a295c4e35a0e6669a0",
+      "dependencies": [
+        "jsr:@std/fmt@1.0.3",
+        "jsr:@std/fs"
+      ]
+    },
     "@henrygd/semaphore@0.1.0": {
       "integrity": "b97fe1283c115cb36adc29ddec750d05e2396f74da6c303f78cb09f44850d161"
     },
+    "@std/fmt@1.0.3": {
+      "integrity": "97765c16aa32245ff4e2204ecf7d8562496a3cb8592340a80e7e554e0bb9149f"
+    },
     "@std/fmt@1.0.10": {
       "integrity": "90dfba288802ac6de82fb31d0917eb9e4450b9925b954d5e51fc29ac07419db5"
+    },
+    "@std/fs@1.0.24": {
+      "integrity": "f3061b45b81673a2bece689da041df32d174be064c89eb6397fb5718d3fb7877",
+      "dependencies": [
+        "jsr:@std/internal",
+        "jsr:@std/path@^1.1.5"
+      ]
     },
     "@std/internal@1.0.14": {
       "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
@@ -116,6 +137,7 @@
       "jsr:@cliffy/command@1.2.1",
       "jsr:@cloudydeno/kubernetes-apis@0.7.2",
       "jsr:@cloudydeno/kubernetes-client@0.8.1",
+      "jsr:@deno-library/logger@1.2.0",
       "jsr:@henrygd/semaphore@0.1.0",
       "jsr:@std/yaml@1.1.1"
     ]

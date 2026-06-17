@@ -1,12 +1,5 @@
 import { stringify as toYaml } from '@std/yaml';
 
-export function createDirPath(command: string): string {
-    const timestamp = new Date().toISOString()
-        .replace(/[:.]/g, '-')
-        .replace(/\.\d{3}Z$/, 'Z');
-    return `./cf-${command}-${timestamp}`;
-}
-
 export async function writeYaml(data: unknown, name: string, dirPath: string) {
     await Deno.mkdir(dirPath, { recursive: true });
     await Deno.writeTextFile(`${dirPath}/${name}.yaml`, toYaml(data, { skipInvalid: true }));

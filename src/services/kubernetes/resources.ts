@@ -1,6 +1,8 @@
+import { logger } from '../../utils/logger.ts';
 import { appsApi, batchApi, coreApi, crdApi, kubeConfig, storageApi } from './client.ts';
 
 async function getCrd(type: string, namespace: string) {
+    logger.info(`Attempting to fetch CRD ${type} in namespace ${namespace}`);
     try {
         const crd = await crdApi.getCustomResourceDefinition(type);
         const path = `/apis/${crd.spec.group}/${
@@ -8,12 +10,18 @@ async function getCrd(type: string, namespace: string) {
         }/namespaces/${namespace}/${crd.spec.names.plural}`;
 
         return await kubeConfig.performRequest({ method: 'GET', path, expectJson: true });
-    } catch {
+    } catch (error) {
+        logger.warn(
+            `CRD ${type} not found or failed to fetch in namespace ${namespace}: ${
+                error instanceof Error ? error.message : String(error)
+            }`,
+        );
         return null;
     }
 }
 
 async function getSortedEvents(namespace: string) {
+    logger.info(`Fetching and sorting events for namespace ${namespace}`);
     try {
         const events = await coreApi.namespace(namespace).getEventList();
         events.items = events.items.sort((a, b) => {
@@ -25,12 +33,18 @@ async function getSortedEvents(namespace: string) {
             return new Date(timeA).getTime() - new Date(timeB).getTime();
         });
         return events;
-    } catch {
+    } catch (error) {
+        logger.error(
+            `Failed to fetch events for namespace ${namespace}: ${
+                error instanceof Error ? error.message : String(error)
+            }`,
+        );
         return { items: [] };
     }
 }
 
 export function getResources(namespace: string) {
+    logger.info(`Generating resource fetchers for namespace ${namespace}`);
     return {
         'configmaps': () => coreApi.namespace(namespace).getConfigMapList(),
         'cronjobs.batch': () => batchApi.namespace(namespace).getCronJobList(),

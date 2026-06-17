@@ -24,6 +24,7 @@
         "@cliffy/command": "jsr:@cliffy/command@1.2.1",
         "@cloudydeno/kubernetes-apis": "jsr:@cloudydeno/kubernetes-apis@0.7.2",
         "@cloudydeno/kubernetes-client": "jsr:@cloudydeno/kubernetes-client@0.8.1",
+        "@deno-library/logger": "jsr:@deno-library/logger@1.2.0",
         "@henrygd/semaphore": "jsr:@henrygd/semaphore@0.1.0",
         "@std/yaml": "jsr:@std/yaml@1.1.1"
     }
