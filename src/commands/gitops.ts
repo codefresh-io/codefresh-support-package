@@ -1,19 +1,26 @@
-import { DIR_PATH, logger, Utils } from '../utils/mod.ts';
-import { K8s } from '../logic/mod.ts';
+import { Command } from '@cliffy/command';
+import { DIR_PATH, logger } from '../utils/logger.ts';
+import { getResources } from '../services/kubernetes/resources.ts';
+import { collectData } from '../services/kubernetes/collector.ts';
+import { selectNamespace } from '../utils/namespace.ts';
+import { preparePackage } from '../utils/files.ts';
 
-export async function gitopsCMD(namespace?: string) {
-    logger.info(`Starting GitOps data collection...`);
-    const k8s = new K8s();
-    const utils = new Utils();
-    if (!namespace) {
-        logger.info('No namespace provided, prompting user to select one.');
-        const selected = await k8s.selectNamespace();
-        namespace = selected;
-    }
+export const gitopsCommand = new Command()
+    .description('Collect data for the Codefresh GitOps Runtime')
+    .option('-n, --namespace <namespace:string>', 'The namespace where the GitOps Runtime is installed')
+    .action(async (options: { namespace?: string }) => {
+        logger.info('Starting data collection for GitOps Runtime');
 
-    console.log(`Gathering data in the '${namespace}' namespace for the GitOps Runtime`);
-    logger.info(`Gathering data in the '${namespace}' namespace for the GitOps Runtime`);
-    const k8sResources = k8s.getResources(namespace);
-    await utils.processData(DIR_PATH, k8sResources);
-    await utils.preparePackage(DIR_PATH, 'gitops');
-}
+        let namespace = options.namespace;
+
+        if (!namespace) {
+            logger.info('No namespace provided. Prompting user to select a namespace.');
+            namespace = await selectNamespace();
+        }
+
+        console.log(`Gathering data in the '${namespace}' namespace for the GitOps Runtime`);
+        logger.info(`Gathering data in the '${namespace}' namespace for the GitOps Runtime`);
+        const k8sResources = getResources(namespace);
+        await collectData(DIR_PATH, k8sResources);
+        await preparePackage(DIR_PATH, 'gitops');
+    });
