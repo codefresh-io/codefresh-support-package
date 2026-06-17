@@ -12,6 +12,7 @@ export const pipelinesCommand = new Command()
     .option('-n, --namespace <namespace:string>', 'The namespace where the Pipelines Runtime is installed')
     .option('-r, --runtime <runtime:string>', 'The name of the Pipelines Runtime')
     .action(async (options: { namespace?: string; runtime?: string }) => {
+        logger.info('Starting data collection for Pipelines Runtime');
         let namespace = options.namespace;
         const runtime = options.runtime;
 
@@ -66,5 +67,5 @@ export const pipelinesCommand = new Command()
         logger.info(`Gathering data in the '${namespace}' namespace for Pipelines Runtime`);
         const k8sResources = getResources(namespace);
         await collectData(DIR_PATH, k8sResources);
-        await preparePackage(DIR_PATH);
+        await preparePackage(DIR_PATH, 'pipelines');
     });

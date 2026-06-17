@@ -22,5 +22,5 @@ export const gitopsCommand = new Command()
         logger.info(`Gathering data in the '${namespace}' namespace for the GitOps Runtime`);
         const k8sResources = getResources(namespace);
         await collectData(DIR_PATH, k8sResources);
-        await preparePackage(DIR_PATH);
+        await preparePackage(DIR_PATH, 'gitops');
     });

@@ -65,5 +65,5 @@ export const onpremCommand = new Command()
         logger.info(`Gathering data in the '${namespace}' namespace for Codefresh OnPrem`);
         const k8sResources = getResources(namespace);
         await collectData(DIR_PATH, k8sResources);
-        await preparePackage(DIR_PATH);
+        await preparePackage(DIR_PATH, 'onprem');
     });
