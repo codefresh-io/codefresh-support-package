@@ -9,7 +9,7 @@ export async function writeYaml(data: unknown, name: string, dirPath: string) {
 export async function preparePackage(dirPath: string, type: string) {
     const supportPackageZip = `${type}-${dirPath}.tar.gz`;
     console.log('Preparing the Support Package');
-    logger.info('Preparing the Support Package');
+    logger.info(`Preparing the Support Package: ${supportPackageZip}`);
 
     const command = new Deno.Command('tar', {
         args: ['-czf', supportPackageZip, dirPath],
@@ -22,8 +22,6 @@ export async function preparePackage(dirPath: string, type: string) {
     }
 
     console.log('Cleaning up temp directory');
-    logger.info('Cleaning up temp directory');
     await Deno.remove(dirPath, { recursive: true });
     console.log(`\nPlease attach ${supportPackageZip} to your support ticket.`);
-    logger.info(`Support package created: ${supportPackageZip}`);
 }
