@@ -32,6 +32,7 @@ export const onpremCommand = new Command()
             );
             console.error('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
             logger.error('For Codefresh SaaS, use "pipelines" or "gitops" commands.');
+            await Deno.remove(DIR_PATH, { recursive: true });
             Deno.exit(1);
         }
 
