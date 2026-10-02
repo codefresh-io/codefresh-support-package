@@ -14,9 +14,6 @@ This project is designed to gather data from Codefresh Hybrid Runtimes OnPrem in
     - `CF_URL`: URL of the platform (ex: `https://g.codefresh.io`)
   - Need an Account Admin Token for Pipelines Hybrid Runtime.
   - Need a System Admin Token for the OnPrem Installation.
-- Other - Not Required
-  - `jq`
-    - Used to get current version to download the support package.
 
 ## Build Info
 
@@ -59,11 +56,8 @@ Commands:
 ### macOS - arm64
 
 ```shell
-# Get the version at https://github.com/codefresh-io/codefresh-support-package/releases
-VERSION=v#.#.#
-
-# download and extract the binary
-curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/download/$VERSION/cf-support_darwin_arm64.tar.gz | tar -zx -O cf-support_darwin_arm64 > cf-support
+# download and extract the latest binary
+curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/latest/download/cf-support_darwin_arm64.tar.gz | tar -zx -O cf-support_darwin_arm64 > cf-support
 
 # set execution to binary
 chmod +x cf-support
@@ -75,11 +69,8 @@ chmod +x cf-support
 ### linux - arm64
 
 ```shell
-# Get the version at https://github.com/codefresh-io/codefresh-support-package/releases
-VERSION=v#.#.#
-
-# download and extract the binary
-curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/download/$VERSION/cf-support_linux_arm64.tar.gz | tar -zx -O cf-support_linux_arm64 > cf-support
+# download and extract the latest binary
+curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/latest/download/cf-support_linux_arm64.tar.gz | tar -zx -O cf-support_linux_arm64 > cf-support
 
 # set execution to binary
 chmod +x cf-support
@@ -91,11 +82,8 @@ chmod +x cf-support
 ### linux - amd64
 
 ```shell
-# Get the version at https://github.com/codefresh-io/codefresh-support-package/releases
-VERSION=v#.#.#
-
-# download and extract the binary
-curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/download/$VERSION/cf-support_linux_amd64.tar.gz | tar -zx -O cf-support_linux_amd64 > cf-support
+# download and extract the latest binary
+curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/latest/download/cf-support_linux_amd64.tar.gz | tar -zx -O cf-support_linux_amd64 > cf-support
 
 # set execution to binary
 chmod +x cf-support
