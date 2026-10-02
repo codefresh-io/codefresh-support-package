@@ -120,10 +120,10 @@ chmod +x cf-support
 ./cf-support
 ```
 
-### Windows - amd6
+### Windows - amd64 / arm64
 
 1. Go the the [Latest](https://github.com/codefresh-io/codefresh-support-package/releases/latest) release.
-1. Download the cf-support_windows_amd64.zip file and extract the `.exe`
+1. Download the `cf-support_windows_amd64.zip` file (or `cf-support_windows_arm64.zip` on ARM devices) and extract the `.exe`
 1. Run the `.exe` file via CMD or PowerShell
    - Do not use the ISE version of PowerShell
 

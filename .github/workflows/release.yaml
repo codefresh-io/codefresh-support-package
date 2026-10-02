@@ -17,6 +17,7 @@ jobs:
           - { os: macos-13, rid: osx-x64, name: darwin_amd64, archive: tar.gz }
           - { os: macos-latest, rid: osx-arm64, name: darwin_arm64, archive: tar.gz }
           - { os: windows-latest, rid: win-x64, name: windows_amd64, archive: zip }
+          - { os: windows-11-arm, rid: win-arm64, name: windows_arm64, archive: zip }
     runs-on: ${{ matrix.os }}
 
     steps:
