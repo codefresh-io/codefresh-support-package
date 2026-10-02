@@ -4,8 +4,9 @@ This project is designed to gather data from Codefresh Hybrid Runtimes OnPrem in
 
 ## Prereqs
 
-- `kubectl`
+- A kubeconfig (`KUBECONFIG` or `~/.kube/config`), or run inside the cluster.
   - Current Context must be the context of the cluster where the Codefresh is installed.
+  - `kubectl` and `tar` are not required.
 - Codefresh
   - CLI installed and configured.
   - Or the following ENV vars set.
@@ -19,7 +20,15 @@ This project is designed to gather data from Codefresh Hybrid Runtimes OnPrem in
 
 ## Build Info
 
-The binary is built on using `ubuntu-latest`.  You can find what is included in this environemnt at [Ubuntu2404-Readme.md](https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md)
+The tool is a [NativeAOT](https://learn.microsoft.com/dotnet/core/deploying/native-aot/) .NET 10 binary with no runtime dependencies. Each platform binary is built natively on its own GitHub runner (see `.github/workflows/release.yaml`).
+
+Build locally (requires the .NET 10 SDK and a C toolchain, i.e. Xcode command line tools or `clang` + `zlib1g-dev`):
+
+```bash
+./build.sh            # publishes for the current platform into ./bin/<rid>
+```
+
+Note: API calls to Codefresh ignore TLS certificate errors (as the previous Deno build did) so that On-Prem installs with self-signed certificates work.
 
 ## Usage
 

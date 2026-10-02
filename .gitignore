@@ -130,3 +130,9 @@ dist
 .pnp.*
 .DS_Store
 bin
+# .NET
+obj/
+[Bb]in/
+*.dSYM/
+cf-support-*/
+*.tar.gz
