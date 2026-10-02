@@ -7,35 +7,72 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    # NativeAOT cannot cross-compile between operating systems, so each target builds on a native runner.
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - { os: ubuntu-latest, rid: linux-x64, name: linux_amd64, archive: tar.gz }
+          - { os: ubuntu-24.04-arm, rid: linux-arm64, name: linux_arm64, archive: tar.gz }
+          - { os: macos-latest, rid: osx-arm64, name: darwin_arm64, archive: tar.gz }
+          - { os: windows-latest, rid: win-x64, name: windows_amd64, archive: zip }
+          - { os: windows-11-arm, rid: win-arm64, name: windows_arm64, archive: zip }
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Deno
-        uses: denoland/setup-deno@v2
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
         with:
-          deno-version: vx.x.x
+          dotnet-version: 10.0.x
 
-      - name: Compile and package binaries
+      - name: Install native toolchain (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+
+      - name: Publish
+        shell: bash
         run: |
-          sed -i "s/__APP_VERSION__/$TAG_NAME/g" ./src/main.ts
-          deno task compile
-          deno task package
+          dotnet publish src/CfSupport/CfSupport.csproj -c Release -r ${{ matrix.rid }} \
+            -p:Version="${TAG_NAME#v}" -o publish
         env:
           TAG_NAME: ${{ github.ref_name }}
 
+      - name: Package
+        shell: bash
+        run: |
+          mkdir -p dist
+          BIN=cf-support_${{ matrix.name }}
+          if [ "${{ matrix.archive }}" = "zip" ]; then
+            cp publish/cf-support.exe "$BIN.exe"
+            7z a "dist/$BIN.zip" "$BIN.exe"
+          else
+            cp publish/cf-support "$BIN"
+            tar -czf "dist/$BIN.tar.gz" "$BIN"
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cf-support_${{ matrix.name }}
+          path: dist/*
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
       - name: Create GitHub Release
-        id: create_release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: |
-            ./bin/cf-support_windows_amd64.zip
-            ./bin/cf-support_darwin_amd64.tar.gz
-            ./bin/cf-support_darwin_arm64.tar.gz
-            ./bin/cf-support_linux_amd64.tar.gz
-            ./bin/cf-support_linux_arm64.tar.gz
+          artifacts: dist/*
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref_name }}
           name: ${{ github.ref_name }}

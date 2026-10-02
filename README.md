@@ -4,8 +4,9 @@ This project is designed to gather data from Codefresh Hybrid Runtimes OnPrem in
 
 ## Prereqs
 
-- `kubectl`
+- A kubeconfig (`KUBECONFIG` or `~/.kube/config`), or run inside the cluster.
   - Current Context must be the context of the cluster where the Codefresh is installed.
+  - `kubectl` and `tar` are not required.
 - Codefresh
   - CLI installed and configured.
   - Or the following ENV vars set.
@@ -13,13 +14,18 @@ This project is designed to gather data from Codefresh Hybrid Runtimes OnPrem in
     - `CF_URL`: URL of the platform (ex: `https://g.codefresh.io`)
   - Need an Account Admin Token for Pipelines Hybrid Runtime.
   - Need a System Admin Token for the OnPrem Installation.
-- Other - Not Required
-  - `jq`
-    - Used to get current version to download the support package.
 
 ## Build Info
 
-The binary is built on using `ubuntu-latest`.  You can find what is included in this environemnt at [Ubuntu2404-Readme.md](https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md)
+The tool is a [NativeAOT](https://learn.microsoft.com/dotnet/core/deploying/native-aot/) .NET 10 binary with no runtime dependencies. Each platform binary is built natively on its own GitHub runner (see `.github/workflows/release.yaml`).
+
+Build locally (requires the .NET 10 SDK and a C toolchain, i.e. Xcode command line tools or `clang` + `zlib1g-dev`):
+
+```bash
+./build.sh            # publishes for the current platform into ./bin/<rid>
+```
+
+Note: API calls to Codefresh ignore TLS certificate errors so that On-Prem installs with self-signed certificates work.
 
 ## Usage
 
@@ -50,27 +56,8 @@ Commands:
 ### macOS - arm64
 
 ```shell
-# Get the version at https://github.com/codefresh-io/codefresh-support-package/releases
-VERSION=v#.#.#
-
-# download and extract the binary
-curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/download/$VERSION/cf-support_darwin_arm64.tar.gz | tar -zx -O cf-support_darwin_arm64 > cf-support
-
-# set execution to binary
-chmod +x cf-support
-
-# run application
-./cf-support
-```
-
-### macOS - amd64
-
-```shell
-# Get the version at https://github.com/codefresh-io/codefresh-support-package/releases
-VERSION=v#.#.#
-
-# download and extract the binary
-curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/download/$VERSION/cf-support_darwin_amd64.tar.gz | tar -zx -O cf-support_darwin_amd64 > cf-support
+# download and extract the latest binary
+curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/latest/download/cf-support_darwin_arm64.tar.gz | tar -zx -O cf-support_darwin_arm64 > cf-support
 
 # set execution to binary
 chmod +x cf-support
@@ -82,11 +69,8 @@ chmod +x cf-support
 ### linux - arm64
 
 ```shell
-# Get the version at https://github.com/codefresh-io/codefresh-support-package/releases
-VERSION=v#.#.#
-
-# download and extract the binary
-curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/download/$VERSION/cf-support_linux_arm64.tar.gz | tar -zx -O cf-support_linux_arm64 > cf-support
+# download and extract the latest binary
+curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/latest/download/cf-support_linux_arm64.tar.gz | tar -zx -O cf-support_linux_arm64 > cf-support
 
 # set execution to binary
 chmod +x cf-support
@@ -98,11 +82,8 @@ chmod +x cf-support
 ### linux - amd64
 
 ```shell
-# Get the version at https://github.com/codefresh-io/codefresh-support-package/releases
-VERSION=v#.#.#
-
-# download and extract the binary
-curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/download/$VERSION/cf-support_linux_amd64.tar.gz | tar -zx -O cf-support_linux_amd64 > cf-support
+# download and extract the latest binary
+curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/latest/download/cf-support_linux_amd64.tar.gz | tar -zx -O cf-support_linux_amd64 > cf-support
 
 # set execution to binary
 chmod +x cf-support
@@ -111,10 +92,10 @@ chmod +x cf-support
 ./cf-support
 ```
 
-### Windows - amd6
+### Windows - amd64 / arm64
 
 1. Go the the [Latest](https://github.com/codefresh-io/codefresh-support-package/releases/latest) release.
-1. Download the cf-support_windows_amd64.zip file and extract the `.exe`
+1. Download the `cf-support_windows_amd64.zip` file (or `cf-support_windows_arm64.zip` on ARM devices) and extract the `.exe`
 1. Run the `.exe` file via CMD or PowerShell
    - Do not use the ISE version of PowerShell
 
