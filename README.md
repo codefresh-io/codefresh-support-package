@@ -25,7 +25,7 @@ Build locally (requires the .NET 10 SDK and a C toolchain, i.e. Xcode command li
 ./build.sh            # publishes for the current platform into ./bin/<rid>
 ```
 
-Note: API calls to Codefresh ignore TLS certificate errors (as the previous Deno build did) so that On-Prem installs with self-signed certificates work.
+Note: API calls to Codefresh ignore TLS certificate errors so that On-Prem installs with self-signed certificates work.
 
 ## Usage
 
