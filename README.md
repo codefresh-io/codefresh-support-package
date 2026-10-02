@@ -72,22 +72,6 @@ chmod +x cf-support
 ./cf-support
 ```
 
-### macOS - amd64
-
-```shell
-# Get the version at https://github.com/codefresh-io/codefresh-support-package/releases
-VERSION=v#.#.#
-
-# download and extract the binary
-curl -L --output - https://github.com/codefresh-io/codefresh-support-package/releases/download/$VERSION/cf-support_darwin_amd64.tar.gz | tar -zx -O cf-support_darwin_amd64 > cf-support
-
-# set execution to binary
-chmod +x cf-support
-
-# run application
-./cf-support
-```
-
 ### linux - arm64
 
 ```shell
